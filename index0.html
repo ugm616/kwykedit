@@ -20,6 +20,7 @@
         min-height: 100vh;
     }
 
+    /* DIGITAL NOISE */
     body::before {
         content: "";
         position: fixed;
@@ -33,6 +34,7 @@
         z-index: 0;
     }
 
+    /* TEXTURED GREEN STREAK */
     body::after {
         content: "";
         position: fixed;
@@ -47,6 +49,7 @@
         z-index: 0;
     }
 
+    /* DARK VIGNETTE */
     .vignette {
         position: fixed;
         top: 0; left: 0;
@@ -56,7 +59,7 @@
         z-index: 1;
     }
 
-    /* SHARDS */
+    /* SHATTERED GLASS SIDES USING SVG */
     .shards-container {
         position: fixed;
         inset: 0;
@@ -68,22 +71,18 @@
     .shard-side {
         position: absolute;
         top: 0;
-        width: 60vw;     /* 150% size */
-        height: 150vh;   /* 150% height */
+        bottom: 0;
+        height: 100vh;
+        width: auto;
         opacity: 0.85;
-        object-fit: cover;
     }
 
     .shard-left {
-        bottom: 0;
-        top: auto;
-        left: -10vw
+        left: -5vw;
     }
 
     .shard-right {
-        right: -10vw;
-        bottom: 0;          /* anchor to bottom */
-        top: auto;          /* disable top anchor */
+        right: -5vw;
         transform: scaleX(-1);
     }
 
@@ -100,6 +99,7 @@
         z-index: 3;
     }
 
+    /* LOGO GLOW */
     header::before {
         content: "";
         position: absolute;
@@ -114,9 +114,9 @@
     }
 
     .logo {
-        width: 280px;
+        width: 110px;
         height: auto;
-        margin: 0 auto 0px;
+        margin: 0 auto 10px;
     }
 
     h1 {
@@ -274,15 +274,21 @@
 <div class="vignette"></div>
 
 <div class="shards-container">
+    <!-- Use the SVG so it stays crisp and full-height -->
     <img src="img/shards.svg" alt="" class="shard-side shard-left">
     <img src="img/shards.svg" alt="" class="shard-side shard-right">
 </div>
 
 <header>
-    <img src="img/logosmall.svg" alt="KwykEdit Logo" class="logo">
+    <img src="img/logo.svg" alt="KwykEdit Logo" class="logo">
 
     <h1>ONLINE VIDEO EDITOR</h1>
     <h2>Built 4 Creators. Perfect 4 Promos</h2>
+
+    <div class="cta-buttons">
+        <a href="#">Subscribe</a>
+        <a href="#">Start Editing</a>
+    </div>
 </header>
 
 <section class="section">
@@ -332,6 +338,15 @@
     </div>
 </section>
 
+<section class="section">
+    <h2>Don’t Miss the Introductory Price</h2>
+    <p>Lock in $2/month for life before the early-access window closes.</p>
+    <div class="cta-buttons">
+        <a href="#">Subscribe</a>
+        <a href="#">Start Editing</a>
+    </div>
+</section>
+
 <footer>
     <p>
         <a href="#">About</a> |
@@ -353,20 +368,6 @@
     } else {
         priceDisplay.textContent = "$3/month";
     }
-
-    /* PARALLAX EFFECT */
-    window.addEventListener("scroll", () => {
-        const scroll = window.scrollY;
-
-        // BOTH shards move in the same direction
-        const offset = scroll * 0.25;
-
-        document.querySelector(".shard-left").style.transform =
-            `translateY(${offset}px)`;
-
-        document.querySelector(".shard-right").style.transform =
-            `scaleX(-1) translateY(${offset}px)`;
-});
 </script>
 
 </body>
