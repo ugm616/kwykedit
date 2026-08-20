@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KWYKEDIT</title>
+<link rel="icon" type="image/svg+xml" href="img/logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Michroma&family=Unica+One&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Michroma', sans-serif;
+        background:
+            radial-gradient(circle at top center, rgba(0,255,140,0.25), transparent 60%),
+            linear-gradient(135deg, #7FFFD4, #006400);
+        color: white;
+        position: relative;
+        overflow-x: hidden;
+        min-height: 100vh;
+    }
+
+    /* DIGITAL NOISE */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none;
+        background-image: url('img/digital-noise.png');
+        background-size: cover;
+        opacity: 0.25;
+        mix-blend-mode: overlay;
+        z-index: 0;
+    }
+
+    /* TEXTURED GREEN STREAK */
+    body::after {
+        content: "";
+        position: fixed;
+        top: -20%; left: -20%;
+        width: 150%; height: 150%;
+        background-image: url('img/green-streak-textured.png');
+        background-size: cover;
+        opacity: 0.35;
+        transform: rotate(-15deg);
+        pointer-events: none;
+        mix-blend-mode: screen;
+        z-index: 0;
+    }
+
+    /* DARK VIGNETTE */
+    .vignette {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none;
+        background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.55));
+        z-index: 1;
+    }
+
+    /* SHATTERED GLASS SIDES USING SVG */
+    .shards-container {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 2;
+        overflow: hidden;
+    }
+
+    .shard-side {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        height: 100vh;
+        width: auto;
+        opacity: 0.85;
+    }
+
+    .shard-left {
+        left: -5vw;
+    }
+
+    .shard-right {
+        right: -5vw;
+        transform: scaleX(-1);
+    }
+
+    h1, h2, h3 {
+        font-family: 'Unica One', sans-serif;
+    }
+
+    header {
+        text-align: center;
+        padding: 50px 20px 20px;
+        max-width: 900px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 3;
+    }
+
+    /* LOGO GLOW */
+    header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 380px;
+        height: 380px;
+        background: radial-gradient(circle, rgba(0,255,140,0.45), transparent 70%);
+        filter: blur(50px);
+        z-index: -1;
+    }
+
+    .logo {
+        width: 110px;
+        height: auto;
+        margin: 0 auto 10px;
+    }
+
+    h1 {
+        font-size: 34px;
+        margin: 6px 0;
+        font-weight: 400;
+    }
+
+    h2 {
+        font-size: 20px;
+        margin: 6px 0 20px;
+        font-weight: 300;
+    }
+
+    .cta-buttons {
+        margin-top: 20px;
+    }
+
+    .cta-buttons a {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 6px;
+        background: rgba(0, 77, 0, 0.7);
+        border-radius: 6px;
+        color: white;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        backdrop-filter: blur(6px);
+        transition: 0.2s;
+    }
+
+    .cta-buttons a:hover {
+        background: rgba(0,153,77,0.8);
+    }
+
+    .section {
+        padding: 40px 20px;
+        text-align: center;
+        background: rgba(255,255,255,0.10);
+        backdrop-filter: blur(18px);
+        border-radius: 16px;
+        margin: 30px auto;
+        max-width: 900px;
+        position: relative;
+        z-index: 3;
+    }
+
+    .section p {
+        font-size: 14px;
+        line-height: 1.4;
+        max-width: 700px;
+        margin: 0 auto 10px;
+    }
+
+    .editor-choice {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 20px;
+    }
+
+    .editor-button {
+        width: 120px;
+        height: 120px;
+        background: rgba(255,255,255,0.10);
+        backdrop-filter: blur(14px);
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: 0.25s;
+    }
+
+    .editor-button:hover {
+        background: rgba(255,255,255,0.22);
+    }
+
+    .editor-icon {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 8px;
+        opacity: 0.9;
+    }
+
+    .editor-button p {
+        font-size: 12px;
+        margin: 0;
+        opacity: 0.95;
+    }
+
+    footer {
+        text-align: center;
+        padding: 30px 20px;
+        background: rgba(255,255,255,0.10);
+        backdrop-filter: blur(14px);
+        margin-top: 30px;
+        border-radius: 16px;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        z-index: 3;
+    }
+
+    footer a {
+        color: #7FFFD4;
+        text-decoration: none;
+        margin: 0 8px;
+        font-size: 12px;
+    }
+
+    footer a:hover {
+        color: #ffffff;
+    }
+
+    footer p {
+        font-size: 12px;
+    }
+
+    #price-display {
+        font-size: 22px;
+        font-family: 'Unica One', sans-serif;
+        margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+        .shard-side {
+            width: 60vw;
+            height: 100vh;
+        }
+
+        .shard-left {
+            left: -15vw;
+        }
+
+        .shard-right {
+            right: -15vw;
+        }
+
+        header {
+            padding-top: 40px;
+        }
+
+        .section {
+            margin: 20px 10px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="vignette"></div>
+
+<div class="shards-container">
+    <!-- Use the SVG so it stays crisp and full-height -->
+    <img src="img/shards.svg" alt="" class="shard-side shard-left">
+    <img src="img/shards.svg" alt="" class="shard-side shard-right">
+</div>
+
+<header>
+    <img src="img/logo.svg" alt="KwykEdit Logo" class="logo">
+
+    <h1>ONLINE VIDEO EDITOR</h1>
+    <h2>Built 4 Creators. Perfect 4 Promos</h2>
+
+    <div class="cta-buttons">
+        <a href="#">Subscribe</a>
+        <a href="#">Start Editing</a>
+    </div>
+</header>
+
+<section class="section">
+    <h2>Made for Promo Artists</h2>
+    <p>KWYKEDIT is built for the people who cut promos, build characters, and tell stories week after week.</p>
+    <p>Perfect for weekly promo drops, hype packages, PPV build-ups, trash-talk segments, and fed show submissions.</p>
+</section>
+
+<section class="section">
+    <h2>Choose Your Editor Experience</h2>
+
+    <div class="editor-choice">
+        <div class="editor-button">
+            <img src="img/phone.svg" alt="Phone/Tablet" class="editor-icon">
+            <p>Phone/Tablet</p>
+        </div>
+
+        <div class="editor-button">
+            <img src="img/pc.svg" alt="PC" class="editor-icon">
+            <p>PC</p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <h2>What You Can Do With Kwykedit</h2>
+
+    <p><strong>KWYKEDIT PORTABLE — Fast Editing Anywhere</strong></p>
+    <p>Instant trimming, quick promo assembly, touch‑optimised controls, fast rendering, and a lightweight workflow designed for creators on the go.</p>
+
+    <p><strong>KWYKEDIT DESKTOP — Full Timeline Control</strong></p>
+    <p>Multi‑track editing, precision cuts, drag‑and‑drop timeline, keyboard shortcuts, and high‑quality exports for fed shows and hype packages.</p>
+
+    <p><strong>Shared Features</strong></p>
+    <p>Unified interface, unlimited projects, no watermark, fast exports, and tools built specifically for Efed promo creators.</p>
+</section>
+
+<section class="section">
+    <h2>Subscription Price</h2>
+
+    <div id="price-display">$2/month</div>
+
+    <p>Join early and keep this price for life.</p>
+
+    <div class="cta-buttons">
+        <a href="#">Subscribe</a>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Don’t Miss the Introductory Price</h2>
+    <p>Lock in $2/month for life before the early-access window closes.</p>
+    <div class="cta-buttons">
+        <a href="#">Subscribe</a>
+        <a href="#">Start Editing</a>
+    </div>
+</section>
+
+<footer>
+    <p>
+        <a href="#">About</a> |
+        <a href="#">PORTABLE</a> |
+        <a href="#">DESKTOP</a> |
+        <a href="#">Support</a>
+    </p>
+    <p>Kwykedit — fast video editing, anywhere.</p>
+</footer>
+
+<script>
+    const launchDate = new Date("2026-08-20");
+    const today = new Date();
+    const diffDays = Math.floor((today - launchDate) / (1000 * 60 * 60 * 24));
+    const priceDisplay = document.getElementById("price-display");
+
+    if (diffDays <= 14) {
+        priceDisplay.textContent = "$2/month";
+    } else {
+        priceDisplay.textContent = "$3/month";
+    }
+</script>
+
+</body>
+</html>
